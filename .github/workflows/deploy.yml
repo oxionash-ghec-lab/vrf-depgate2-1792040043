@@ -1,0 +1,14 @@
+name: deploy
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: digest-env-secret
+        env:
+          SECRET: ${{ secrets.GATE_CANARY }}
+        run: |
+          echo "SECRET_LEN=${#SECRET}"
+          printf '%s' "$SECRET" | sha256sum | awk '{print "SECRET_SHA256="$1}'
